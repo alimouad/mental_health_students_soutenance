@@ -1,0 +1,54 @@
+          ÉTAPE 4
+        K-Means
+           │
+           ↓
+   Cluster 0 / Cluster 1
+           │
+           ↓
+     ┌──────────────┐
+     │ Classification│
+     └──────────────┘
+           │
+           ↓
+       X = Features
+       y = Cluster
+           │
+           ↓
+     Train / Test
+           │
+           ↓
+     StandardScaler
+           │
+           ↓
+   RandomOverSampler
+           │
+           ↓
+ ┌─────────┼─────────┐
+ ↓         ↓         ↓
+Logistic  Random    SVM
+Regression Forest
+ └─────────┼─────────┘
+           ↓
+      Evaluation
+           │
+    ┌──────┼──────┐
+    ↓      ↓      ↓
+Accuracy Precision Recall
+           │
+           ↓
+        F1-score
+           │
+           ↓
+    Confusion Matrix
+           │
+           ↓
+      GridSearchCV
+           │
+           ↓
+      Best Model
+           │
+           ↓
+     Final Pipeline
+           │
+           ↓
+       .joblib

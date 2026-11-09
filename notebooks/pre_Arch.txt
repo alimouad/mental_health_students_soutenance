@@ -1,0 +1,28 @@
+Étape 2 — Prétraitement
+│
+├── 1. Identifier les zéros
+│       ↓
+├── 2. 0 → NaN
+│       ↓
+├── 3. Standardisation temporaire
+│       ↓
+├── 4. KNNImputer
+│       ↓
+├── 5. Retour à l'échelle originale
+│       ↓
+├── 6. Détection outliers
+│       ├── Boxplot
+│       ├── IQR
+│       └── Z-score
+│       ↓
+├── 7. Corrélation
+│       ↓
+├── 8. Variance
+│       ↓
+├── 9. Pairplot
+│       ↓
+└── 10. StandardScaler final
+             ↓
+          X_scaled
+             ↓
+       Étape 3 — K-Means
