@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Osha</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fff8fb;--bg2:#f8dce8;--card:rgba(255,255,255,.72);--ink:#39202e;--dim:#8b6478;--rose:#c92f68;--rose-dark:#a92154;--line:rgba(201,47,104,.2)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#22121a;--bg2:#331a26;--card:#3a2230d9;--ink:#fbe9ef;--dim:#d3a9ba;--rose:#ff6b9a}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#22121a;--bg2:#331a26;--card:#3a2230d9;--ink:#fbe9ef;--dim:#d3a9ba;--rose:#ff6b9a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:radial-gradient(circle at 15% 15%,rgba(255,255,255,.9),transparent 30%),radial-gradient(circle at 85% 85%,rgba(212,91,139,.18),transparent 34%),linear-gradient(135deg,var(--bg),var(--bg2));color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.7;overflow:hidden}
+#app{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}
+.stage{flex:1;display:grid;place-items:center;padding:28px 18px;overflow:auto}
+.slide{display:none;width:100%;max-width:580px;text-align:center;background:var(--card);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:30px;padding:38px 30px;box-shadow:0 24px 70px rgba(128,28,72,.16),inset 0 1px rgba(255,255,255,.75)}
+.slide.on{display:block;animation:in .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+svg.r{width:112px;height:112px;filter:drop-shadow(0 10px 14px rgba(169,30,77,.18))}
+h1{font-size:clamp(2.8rem,8vw,4rem);margin:.1em 0;color:var(--rose);font-style:italic;letter-spacing:3px;text-shadow:0 4px 18px rgba(201,47,104,.16)}
+h2{margin:.2em 0 .65em;color:var(--rose-dark);font-weight:normal;font-size:clamp(1.5rem,4vw,2rem);letter-spacing:.3px}
+p{margin:.55em 0;font-size:1.08rem}
+#msg{white-space:pre-line}
+.sub{color:var(--dim);font-style:italic}
+.chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px}
+.chip{padding:8px 15px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.45);font-size:.95rem;box-shadow:0 4px 12px rgba(128,28,72,.07)}
+.sign{margin-top:14px;color:var(--dim);font-style:italic}
+input{width:100%;max-width:280px;font:inherit;font-size:1.1rem;text-align:center;padding:13px 15px;border-radius:15px;border:1px solid var(--line);background:rgba(255,255,255,.52);color:var(--ink);margin-top:12px;outline:none;transition:box-shadow .2s,border-color .2s}
+input:focus{border-color:var(--rose);box-shadow:0 0 0 4px rgba(201,47,104,.13)}
+button{font:inherit;border:0;border-radius:99px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-align:center}
+.go{background:linear-gradient(135deg,var(--rose),var(--rose-dark));color:#fff;padding:12px 30px;margin-top:14px;font-weight:bold;box-shadow:0 8px 18px rgba(169,30,77,.24);transition:transform .2s,box-shadow .2s}
+.go:hover{transform:translateY(-2px);box-shadow:0 11px 24px rgba(169,30,77,.3)}
+#err{color:var(--rose);min-height:1.6em;margin-top:8px}
+nav{display:none;align-items:center;justify-content:center;gap:16px;padding:10px 0 calc(22px + env(safe-area-inset-bottom,0px))}
+nav.on{display:flex}
+nav button{background:rgba(255,255,255,.55);color:var(--rose);width:46px;height:46px;font-size:1.4rem;border:1px solid var(--line);box-shadow:0 5px 15px rgba(128,28,72,.1);transition:transform .2s,background .2s}
+nav button:hover{transform:translateY(-2px);background:#fff}
+.dots{display:flex;gap:8px;align-items:center}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(201,47,104,.24);transition:transform .2s,background .2s}
+.dot.on{transform:scale(1.35);background:var(--rose)}
+.dot.on{background:var(--rose)}
+.shake{animation:sh .3s}
+@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.slide.dream{background:linear-gradient(180deg,#25234f,#5b4fb8 55%,#f2a0c0);color:#fff;border-color:#ffffff40;overflow:hidden;padding-top:18px;box-shadow:0 24px 70px rgba(37,35,79,.28),inset 0 1px rgba(255,255,255,.3)}
+.dream h2{color:#fff;font-style:italic;letter-spacing:1px}
+.dream p{color:#fff;opacity:0;animation:fu 1.2s ease forwards}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:.95;transform:none}}
+.scene{width:100%;height:auto;display:block;margin-bottom:6px}
+.st{animation:tw 2.6s ease-in-out infinite}
+@keyframes tw{50%{opacity:.2}}
+.cl{animation:dr 9s ease-in-out infinite alternate}
+@keyframes dr{to{transform:translateX(26px)}}
+.petal{position:fixed;top:-30px;width:14px;height:18px;background:var(--rose);border-radius:80% 0 80% 0;opacity:.5;z-index:0;animation:fall linear infinite;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.petal{display:none}}
+@media (max-width:480px){.stage{padding:16px 12px}.slide{border-radius:24px;padding:30px 20px}.slide.dream{padding:14px 14px 26px}p{font-size:1rem}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="rose" viewBox="0 0 100 100">
+<ellipse cx="22" cy="78" rx="20" ry="9" transform="rotate(-25 22 78)" fill="#5f9f7a"/>
+<ellipse cx="78" cy="78" rx="20" ry="9" transform="rotate(25 78 78)" fill="#5f9f7a"/>
+<circle cx="50" cy="46" r="34" fill="#c2255c"/><circle cx="50" cy="46" r="27" fill="#d6336c"/>
+<circle cx="50" cy="46" r="20" fill="#e64980"/><circle cx="50" cy="46" r="13" fill="#f06595"/>
+<path d="M50 46 m-6 0 a6 6 0 1 1 6 6 a10 10 0 1 1 -10 -10 a14 14 0 1 1 14 14" fill="none" stroke="#a61e4d" stroke-width="2" stroke-linecap="round"/>
+</symbol></defs></svg>
+
+<div id="app">
+  <div class="stage">
+    <section class="slide on" id="gate">
+      <svg class="r"><use href="#rose"/></svg>
+      <h2>Surprise khassa lik</h2>
+      <p class="sub">Dkhli l password bach tchofi surprise  rah sahel fekri mzn!!</p>
+      <input id="pw" type="password" autocomplete="off" placeholder="password">
+      <div><button class="go" id="open">Fte7</button></div>
+      <div id="err"></div>
+    </section>
+
+    <section class="slide">
+      <svg class="r"><use href="#rose"/></svg>
+      <h1>Osha</h1>
+      <p class="sub">Chaimaa</p>
+      <p>Mer7ba bik. Had hya surprise li gtlik lbare7.</p>
+    </section>
+
+    <section class="slide">
+      <h2>Chkon hiya Osha</h2>
+      <p id="desc"></p>
+    </section>
+
+    <section class="slide">
+      <h2>Ach kay3jbha</h2>
+      <div class="chips" id="likes"></div>
+    </section>
+
+    <section class="slide dream">
+      <svg class="scene" viewBox="0 0 400 190" aria-hidden="true">
+        <circle cx="320" cy="46" r="20" fill="#fff6d6"/>
+        <circle class="st" cx="40" cy="26" r="2" fill="#fff"/><circle class="st" cx="110" cy="52" r="1.6" fill="#fff" style="animation-delay:.8s"/><circle class="st" cx="190" cy="20" r="2.2" fill="#fff" style="animation-delay:1.4s"/><circle class="st" cx="255" cy="60" r="1.6" fill="#fff" style="animation-delay:.4s"/><circle class="st" cx="75" cy="88" r="1.4" fill="#fff" style="animation-delay:2s"/>
+        <g class="cl" fill="#ffffff" opacity=".75"><ellipse cx="90" cy="110" rx="46" ry="11"/><ellipse cx="120" cy="102" rx="28" ry="11"/></g>
+        <path d="M0 190 L0 135 L70 70 L120 118 L190 48 L270 130 L320 92 L400 150 L400 190Z" fill="#3b3585"/>
+        <path d="M190 48 L170 76 L190 70 L206 82Z" fill="#fff"/><path d="M70 70 L56 90 L72 85 L84 94Z" fill="#fff"/>
+        <path d="M0 190 L0 160 L90 132 L170 160 L260 138 L400 168 L400 190Z" fill="#251f5e"/>
+      </svg>
+      <h2>7olm Switzerland</h2>
+      <div id="trip"></div>
+    </section>
+
+    <section class="slide">
+      <svg class="r"><use href="#rose"/></svg>
+      <h2>Kelma sghira</h2>
+      <p id="msg"></p>
+      <div class="sign" id="sign"></div>
+    </section>
+  </div>
+  <nav id="nav"><button id="prev" aria-label="Lwra">‹</button><div class="dots" id="dots"></div><button id="next" aria-label="Morah">›</button></nav>
+</div>
+
+<script>
+// ===== Tbddel hna =====
+var PASSWORD = "osha";
+var DESC = "Osha hiya wahed l bent li kat9ra mzn obzaf. Kol ktab 3ndha 3alam jdid, w kol safha kat3tiha fikra jdida. 3ndha 3in dyal detective: katbghi tfhem chno w9e3, w taktachef 2asrar 9bel ma yban l7al. W 9bel kolchi, hiya 3ziza bzaf. 3tiraf sgher hhh";
+var LIKES = ["Lkoutob w l9raya", "histoires policiers", "Ghomoud w l9adaya", "Voyage lkhouj", "Lwerd", "Les histoires mn lwl l lkhr","Shopping"];
+var TRIP = "Ghmdi 3inik chwiya w tkhayli...|Rak fi jbal 3alin kaynin fo9 ghyoum, w sma kolha njoum.|o7dak bo7ayrat, kat3kess l9mar b7al mraya.|fi Mdina sghira, dayer bik lwerd, o ri7a dyal chocolat f kol zen9a.|W nti katmchay b hdou2, w kol blassa ghadi tb9a tfakrek bi ahsn voyage dertih .| Hada mashi ghir voyage 3adi, hada 7olm sgher dyalek ghadi t7a9ih, w nhar tsafri ghadi tkouni f dakchi li kanti kat9rayh.";
+var MSG = "Hadi ghir surprise sghera jat 3la ghefla tstahli ma hsn db rah mzl knktachef chi 7wayej jdad bach next time tkoun chi haja ma hsn\n🌸 Sweet Osha 🌸"
+var SIGN = "Mn 3and : [MOUAD]";
+// =======================
+var slides = document.querySelectorAll(".slide"), cur = 0, unlocked = false;
+document.getElementById("desc").textContent = DESC;
+TRIP.split("|").forEach(function(t, i){ var p = document.createElement("p"); p.textContent = t; p.style.animationDelay = (0.4 + i * 1.1) + "s"; document.getElementById("trip").appendChild(p); });
+document.getElementById("msg").textContent = MSG;
+document.getElementById("sign").textContent = SIGN;
+LIKES.forEach(function(t){ var c = document.createElement("span"); c.className = "chip"; c.textContent = t; document.getElementById("likes").appendChild(c); });
+var dots = document.getElementById("dots");
+for (var k = 1; k < slides.length; k++){ var d = document.createElement("div"); d.className = "dot"; dots.appendChild(d); }
+function go(n){
+  if(!unlocked) return;
+  cur = Math.max(1, Math.min(slides.length - 1, n));
+  slides.forEach(function(s, i){ s.classList.toggle("on", i === cur); });
+  Array.prototype.forEach.call(dots.children, function(d, i){ d.classList.toggle("on", i === cur - 1); });
+  document.getElementById("prev").style.visibility = cur === 1 ? "hidden" : "visible";
+  document.getElementById("next").style.visibility = cur === slides.length - 1 ? "hidden" : "visible";
+}
+function tryPw(){
+  var v = document.getElementById("pw").value.trim().toLowerCase();
+  if(v === PASSWORD){ unlocked = true; document.getElementById("nav").classList.add("on"); go(1); }
+  else {
+    var g = document.getElementById("gate"); g.classList.remove("shake"); void g.offsetWidth; g.classList.add("shake");
+    document.getElementById("err").textContent = "Password ghalat, 3awdi.";
+  }
+}
+document.getElementById("open").onclick = tryPw;
+document.getElementById("pw").onkeydown = function(e){ if(e.key === "Enter") tryPw(); };
+document.getElementById("next").onclick = function(){ go(cur + 1); };
+document.getElementById("prev").onclick = function(){ go(cur - 1); };
+document.onkeydown = function(e){ if(e.key === "ArrowRight") go(cur + 1); if(e.key === "ArrowLeft") go(cur - 1); };
+var x0 = null;
+document.ontouchstart = function(e){ x0 = e.touches[0].clientX; };
+document.ontouchend = function(e){ if(x0 === null) return; var dx = e.changedTouches[0].clientX - x0; if(Math.abs(dx) > 50) go(cur + (dx < 0 ? 1 : -1)); x0 = null; };
+for (var i = 0; i < 16; i++){
+  var p = document.createElement("div"); p.className = "petal";
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = (9 + Math.random() * 9) + "s";
+  p.style.animationDelay = (-Math.random() * 14) + "s";
+  document.body.appendChild(p);
+}
+</script>
+</body>
+</html>
