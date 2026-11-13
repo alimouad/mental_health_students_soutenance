@@ -1,2 +1,56 @@
+
 services:
-  
+  streamlit:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.streamlit
+    container_name: mindscope-streamlit
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./app:/app/app
+      - ./src:/app/src
+      - ./models:/app/models
+      - ./data:/app/data
+      - ./reports:/app/reports
+    ports:
+      - "8502:8501"
+    command: >
+      streamlit run app/app.py
+      --server.address=0.0.0.0
+      --server.port=8501
+
+  airflow:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.airflow
+    container_name: mindscope-airflow
+    restart: unless-stopped
+    group_add:
+      - "1000"
+    entrypoint:
+      - /usr/bin/dumb-init
+      - --
+      - /bin/bash
+      - -c
+    environment:
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+      PYTHONPATH: /opt/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./data:/opt/airflow/data
+      - ./models:/opt/airflow/models
+      - ./reports:/opt/airflow/reports
+      - airflow_logs:/opt/airflow/logs
+      - airflow_data:/opt/airflow
+    ports:
+      - "8081:8080"
+    command:
+      - rm -f /opt/airflow/airflow-webserver.pid && exec airflow standalone
+
+volumes:
+  airflow_logs:
+  airflow_data:
